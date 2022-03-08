@@ -23,7 +23,7 @@ import {
  }
 
  interface Props {
-     category: string;
+     category: Category;
      setCAtegory: (category: Category) => void;
      closeSelectCategory: () => void;
  }
