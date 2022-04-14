@@ -3,7 +3,19 @@ import { HighlightCard } from '../../components/HighlightCard';
 import { TransactionCard, TransactionCardProps } from '../../components/TransactionCard';
 import {
     Container,
-    Header, HighlightCards, Icon, Photo, Title, Transactions, TransactionsList, User, UserGreeting, UserInfo, UserName, UserWraper
+    Header, 
+    HighlightCards, 
+    Icon, 
+    Photo, 
+    Title, 
+    Transactions, 
+    TransactionsList, 
+    User, 
+    UserGreeting, 
+    UserInfo, 
+    UserName, 
+    UserWraper,
+    LogoutButton
 } from './styles';
 
 
@@ -66,7 +78,9 @@ export function Dashboard(){
                         </User>
                     </UserInfo>
                     
-                    <Icon name='power'/>        
+                    <LogoutButton onPress={()=> {}}>
+                        <Icon name='power'/>        
+                    </LogoutButton>
                 </UserWraper>
 
             </Header>
