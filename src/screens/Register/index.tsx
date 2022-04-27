@@ -9,14 +9,16 @@ import {
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import uuid from 'react-native-uuid';
 
 import { useForm } from 'react-hook-form';
+import { useNavigation } from '@react-navigation/native';
 
-import { InputForm } from '../../components/Forms/InputForm';
 //import { Input } from '../../components/Forms/Input';
+import { InputForm } from '../../components/Forms/InputForm';
 import { Button } from '../../components/Forms/Button';
-import {TransactionTypeButton} from '../../components/Forms/TransactionTypeButton';
-import {CategorySelectButton} from '../../components/Forms/CategorySelectButton';
+import { TransactionTypeButton } from '../../components/Forms/TransactionTypeButton';
+import { CategorySelectButton } from '../../components/Forms/CategorySelectButton';
 import { CategorySelect } from '../CategorySelect';
 
 
@@ -36,6 +38,10 @@ import {
  */
 export type FormData = {
    [name: string]: any;
+}
+
+type NavigationProps = {
+    navigate: (screen:string) => void;
 }
 
 const schema = Yup.object().shape({
@@ -58,17 +64,17 @@ export function Register(){
         name: 'Categoria'
     });
 
+    const navigation = useNavigation<NavigationProps>();
+
     const {
         control, 
-        handleSubmit, 
+        handleSubmit,
+        reset, 
         formState: {errors}
     } = useForm({
         resolver: yupResolver(schema)
     });
     
-    const dataKey = '@gofinances:transactions';
-    
-
     function handleTransactionsTypeSelect(type: 'up' | 'down'){
         setTransactionType(type);
     }
@@ -100,18 +106,34 @@ export function Register(){
             return Alert.alert('Selecione a categoria');
         }
 
-        const data = {
+        const newTransaction = {
+            id: String(uuid.v4()),
             name: form.name,
             amout: form.amount,
             transactionType,
-            category: category.key
+            category: category.key,
+            date: new Date()
         }
 
-        console.log(data);
-
         try {
+            const dataKey = '@gofinances:transactions';
+            const data = await AsyncStorage.getItem(dataKey);
+            const currentData = data ? JSON.parse(data) : [];
+            const dataFormatted = [    //array de objetos, antigas mais a nova
+                ...currentData,
+                newTransaction
+            ];
+
+            await AsyncStorage.setItem(dataKey, JSON.stringify(dataFormatted));  
             
-            await AsyncStorage.setItem(dataKey, JSON.stringify(data));    
+            reset();
+            setTransactionType('');
+            setCategory({
+                key: 'category',
+                name: 'Categoria'
+            });
+
+            navigation.navigate('Listagem');
 
         } catch (error) {
             console.log(error);
@@ -120,6 +142,7 @@ export function Register(){
     }
 
     useEffect(() => {
+        const dataKey = '@gofinances:transactions';
         async function loadData() {
             const data = await AsyncStorage.getItem(dataKey);
             //console.log(data);
@@ -127,6 +150,11 @@ export function Register(){
         }
 
         loadData();
+        async function removeAll(){
+            await AsyncStorage.removeItem(dataKey);
+        }
+
+        removeAll(); 
     }, []);
 
     return(
