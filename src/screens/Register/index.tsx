@@ -109,8 +109,8 @@ export function Register(){
         const newTransaction = {
             id: String(uuid.v4()),
             name: form.name,
-            amout: form.amount,
-            transactionType,
+            amount: form.amount,
+            type: transactionType,
             category: category.key,
             date: new Date()
         }
@@ -141,7 +141,7 @@ export function Register(){
         }
     }
 
-    useEffect(() => {
+    /* useEffect(() => {
         const dataKey = '@gofinances:transactions';
         async function loadData() {
             const data = await AsyncStorage.getItem(dataKey);
@@ -155,7 +155,19 @@ export function Register(){
         }
 
         removeAll(); 
+    }, []);  */
+ 
+
+    useEffect(() => {
+        const dataKey = '@gofinances:transactions';
+        async function loadData() {
+            const data = await AsyncStorage.getItem(dataKey);
+            //console.log(data);
+            console.log(JSON.parse(data!)); //! = recurso do TS -> sempre vai ter valor
+        }
+        loadData();
     }, []);
+
 
     return(
         <TouchableWithoutFeedback 
