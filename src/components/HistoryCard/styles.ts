@@ -12,6 +12,7 @@ export const Container = styled.View<ContainerProps>`
     justify-content: space-between;
 
     padding: 13px 24px;
+    margin-bottom: 5px;
 
     border-radius: 5px;
     border-left-width: 5px;
