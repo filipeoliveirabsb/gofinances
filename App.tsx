@@ -16,6 +16,10 @@ import 'intl';
 import 'intl/locale-data/jsonp/pt-BR';
 import { NavigationContainer} from '@react-navigation/native';
 import { AppRoutes} from './src/routes/app.routes';
+
+import { SignIn } from './src/screens/SignIn';
+
+import { AuthProvider, useAuth } from './src/hooks/auth';
 //import { CategorySelect } from './src/screens/CategorySelect';
 //import { Register } from './src/screens/Register';
 //import { Dashboard } from './src/screens/Dashboard';
@@ -36,7 +40,11 @@ export default function App() {
       <ThemeProvider theme={theme}>
         <NavigationContainer>
           <StatusBar barStyle="light-content"/>
-          <AppRoutes/> 
+          
+          <AuthProvider>
+            <SignIn/> 
+          </AuthProvider>
+
         </NavigationContainer>
       </ThemeProvider>
     </GestureHandlerRootView>
