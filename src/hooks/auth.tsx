@@ -1,4 +1,4 @@
-import { 
+import React, { 
     createContext, 
     ReactNode, 
     useContext, 
@@ -49,14 +49,17 @@ function AuthProvider({ children }: AuthProviderProps){
             if (type==='success'){
                 const response = await fetch(`https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=${params.access_token}`);
                 const userInfo = response.json();
+                
+                setUser({
+                    id: userInfo.id,
+                    email: userInfo.email,
+                    name: userInfo.given_name,
+                    photo: userInfo.picture
+                });
+                console.log(userInfo);
             }
 
-            setUser({
-                id: userInfo.id,
-                email: userInfo.email,
-                name: userInfo.given_name,
-                photo: userInfo.picture
-            });
+
 
         } catch (error) {
             throw new Error(error as string);
