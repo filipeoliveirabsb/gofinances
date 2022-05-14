@@ -1,4 +1,4 @@
-import { 
+import React, { 
     createContext, 
     ReactNode, 
     useContext 
@@ -26,7 +26,7 @@ function AuthProvider({ children }: AuthProviderProps){
     const user = {
         id: '123',
         name: 'Fulano',
-        email: 'fulano@gamil.com',
+        email: 'fulano@gmail.com',
     }
 
     return(
