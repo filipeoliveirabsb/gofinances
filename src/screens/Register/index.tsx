@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState} from 'react';
 import { 
     Modal, 
     TouchableWithoutFeedback, 
@@ -30,6 +30,7 @@ import {
     Fields,
     TransactionsTypes
 } from './styles';
+import { useAuth } from '../../hooks/auth';
 
 /*  interface FormData {
      name: string;
@@ -62,6 +63,8 @@ export function Register(){
     const [categoryModalOpen, setCategoryModalOpen] = useState(false);
     /*     const [name, setName] = useState('');
     const [amount, setAmount] = useState(''); */
+
+    const {user} = useAuth();
 
     const [category, setCategory] = useState({
         key: 'category',
@@ -120,7 +123,7 @@ export function Register(){
         }
 
         try {
-            const dataKey = '@gofinances:transactions';
+            const dataKey = `@gofinances:transactions_user:${user.id}`;
             const data = await AsyncStorage.getItem(dataKey);
             const currentData = data ? JSON.parse(data) : [];
             const dataFormatted = [    //array de objetos, antigas mais a nova
